@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Crawler {
 
@@ -21,8 +22,22 @@ public class Crawler {
                 list_chap.add(new Chap(url1));
             }
         }
-        list_chap.forEach(chap -> System.out.println(chap.getUrl()));
+        //list_chap.forEach(chap -> System.out.println(chap.getUrl()));
         return list_chap;
+    }
+
+
+    public void saveAllImageAllChap(String url) throws IOException {
+        Crawler_Image crawler_image = new Crawler_Image();
+        List<String> strings = getAllChap(url).stream()
+                .map(Chap::getUrl).toList();
+        strings.forEach(s -> {
+            try {
+                crawler_image.saveAllImage(s);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
 }
